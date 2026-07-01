@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高島平 ここからステーション</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:#F1EFE8}
+.app{background:#F1EFE8;min-height:900px;padding:0;max-width:760px;margin:0 auto;box-shadow:0 0 0 1px #D3D1C7}
+.header{background:#ffffff;border-bottom:0.5px solid #D3D1C7;padding:20px 20px;display:flex;align-items:center;justify-content:space-between}
+.header-title{font-size:18px;font-weight:500;color:#2C2C2A}
+.header-sub{font-size:13px;color:#5F5E5A;margin-top:2px}
+.back-btn{display:flex;align-items:center;gap:4px;font-size:15px;color:#5F5E5A;cursor:pointer}
+.back-btn i{font-size:20px}
+.content{padding:20px}
+.page{display:none}
+.page.active{display:block}
+
+.home-grid{display:flex;flex-direction:column;gap:14px;padding-top:4px}
+
+.btn-checkin{display:flex;align-items:center;gap:18px;background:#185FA5;border:none;border-radius:16px;padding:30px 24px;cursor:pointer}
+.btn-checkin:active{transform:scale(0.99);opacity:0.92}
+.btn-checkin .home-icon{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.16);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-checkin .home-icon i{font-size:30px;color:#ffffff}
+.btn-checkin .home-btn-label{font-size:22px;font-weight:500;color:#ffffff}
+.btn-checkin .home-btn-sub{font-size:14px;color:#B5D4F4;margin-top:2px}
+.btn-checkin .home-arrow{margin-left:auto;color:rgba(255,255,255,0.6);font-size:20px}
+
+.secondary-row{display:flex;flex-direction:column;gap:12px}
+.home-btn{display:flex;align-items:center;gap:14px;border-radius:12px;padding:18px 18px;cursor:pointer;background:#ffffff;border:0.5px solid #D3D1C7}
+.home-btn:active{transform:scale(0.99);background:#F1EFE8}
+.home-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.home-icon i{font-size:22px}
+.home-btn.register .home-icon{background:#E1F5EE}
+.home-btn.register .home-icon i{color:#0F6E56}
+.home-btn.history .home-icon{background:#EEEDFE}
+.home-btn.history .home-icon i{color:#534AB7}
+.home-btn-label{font-size:16px;font-weight:500;color:#2C2C2A}
+.home-btn-sub{font-size:12px;color:#5F5E5A;margin-top:1px}
+.home-arrow{margin-left:auto;color:#888780;font-size:18px;flex-shrink:0}
+
+.home-divider{border-top:0.5px solid #D3D1C7;margin:6px 0 2px}
+
+.mini-row{display:flex;gap:10px}
+.mini-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;background:#ffffff;border:0.5px solid #D3D1C7;border-radius:8px;padding:14px 10px;cursor:pointer}
+.mini-btn:active{background:#F1EFE8}
+.mini-btn i{font-size:20px;color:#5F5E5A}
+.mini-btn-label{font-size:13px;color:#5F5E5A}
+
+.search-box{background:#ffffff;border:1px solid #B4B2A9;border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.search-box input{border:none;background:transparent;font-size:19px;color:#2C2C2A;flex:1;outline:none}
+.search-box i{font-size:24px;color:#5F5E5A}
+.member-card{background:#ffffff;border:1px solid #D3D1C7;border-radius:12px;padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.avatar{width:56px;height:56px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:#185FA5;flex-shrink:0}
+.member-info{flex:1;min-width:0}
+.member-name{font-size:19px;font-weight:500;color:#2C2C2A}
+.member-kana{font-size:14px;color:#5F5E5A;margin-top:2px}
+.member-meta{font-size:13px;color:#5F5E5A;margin-top:5px}
+.checkin-btn{background:#185FA5;color:white;border:none;border-radius:12px;padding:16px 18px;font-size:17px;font-weight:500;cursor:pointer;white-space:nowrap;min-height:56px}
+.checkin-btn:active{opacity:0.8;transform:scale(0.98)}
+.success-banner{background:#EAF3DE;border:1px solid #639922;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.success-banner i{font-size:30px;color:#3B6D11}
+.success-text{font-size:19px;font-weight:500;color:#27500A}
+.success-sub{font-size:15px;color:#3B6D11;margin-top:3px}
+.section-label{font-size:14px;color:#5F5E5A;margin-bottom:10px;font-weight:500;letter-spacing:0.02em}
+
+.date-nav{display:flex;align-items:center;justify-content:space-between;background:#ffffff;border:1px solid #B4B2A9;border-radius:12px;padding:8px;margin-bottom:18px}
+.date-arrow{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:#5F5E5A;flex-shrink:0}
+.date-arrow:active{background:#F1EFE8}
+.date-arrow i{font-size:24px}
+.date-arrow.disabled{opacity:0.3;pointer-events:none}
+.date-label{font-size:17px;font-weight:500;color:#2C2C2A;text-align:center;flex:1}
+.date-label-sub{font-size:12px;color:#5F5E5A;margin-top:1px}
+
+.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.metric{background:#F1EFE8;border-radius:12px;padding:20px 16px;text-align:center}
+.metric-label{font-size:13px;color:#5F5E5A;margin-bottom:6px}
+.metric-value{font-size:40px;font-weight:500;color:#2C2C2A;line-height:1.1}
+.metric.new .metric-value{color:#0F6E56}
+
+.history-item{background:#ffffff;border:1px solid #D3D1C7;border-radius:8px;padding:18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.history-name{font-size:18px;font-weight:500;color:#2C2C2A}
+.history-time{font-size:28px;font-weight:500;color:#2C2C2A;letter-spacing:0.01em}
+.badge{display:inline-block;background:#E6F1FB;color:#185FA5;font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500;margin-top:6px}
+.badge.new{background:#EAF3DE;color:#27500A}
+.form-group{margin-bottom:16px}
+.form-label{font-size:14px;color:#5F5E5A;margin-bottom:6px}
+.form-input{width:100%;background:#ffffff;border:1px solid #B4B2A9;border-radius:8px;padding:14px 16px;font-size:18px;color:#2C2C2A;outline:none}
+.form-input:focus{border-color:#185FA5}
+select.form-input{appearance:none}
+.form-row{display:flex;gap:10px}
+.form-row .form-group{flex:1;min-width:0}
+.birth-row{display:flex;align-items:center;gap:8px}
+.birth-row input{text-align:center}
+.birth-row span{font-size:15px;color:#5F5E5A;flex-shrink:0}
+.birth-row .yr{flex:1.3}
+.birth-row .mo,.birth-row .dy{flex:1}
+.btn-primary{width:100%;background:#185FA5;color:white;border:none;border-radius:12px;padding:18px;font-size:18px;font-weight:500;cursor:pointer;margin-top:10px;min-height:56px}
+.btn-primary:active{opacity:0.85}
+.btn-secondary{width:100%;background:#ffffff;color:#2C2C2A;border:1px solid #B4B2A9;border-radius:12px;padding:16px;font-size:16px;cursor:pointer;margin-top:10px;min-height:52px}
+.empty{text-align:center;padding:48px 20px;color:#5F5E5A;font-size:16px}
+.empty i{font-size:44px;display:block;margin-bottom:12px;opacity:0.4}
+.staff-only{background:#F1EFE8;border-radius:8px;padding:10px 12px;margin-top:10px;font-size:13px;color:#5F5E5A;display:flex;align-items:flex-start;gap:8px}
+
+.export-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.export-row label{font-size:14px;color:#5F5E5A;width:56px;flex-shrink:0}
+.export-row input[type=date]{flex:1;font-size:16px}
+.export-preview{font-size:13px;color:#5F5E5A;margin:4px 0 18px;text-align:center}
+
+.stat-block{margin-bottom:20px}
+.stat-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.stat-bar-label{font-size:13px;color:#5F5E5A;width:64px;flex-shrink:0}
+.stat-bar-track{flex:1;height:10px;background:#F1EFE8;border-radius:6px;overflow:hidden}
+.stat-bar-fill{height:100%;border-radius:6px}
+.stat-bar-fill.age{background:#7F77DD}
+.stat-bar-fill.region{background:#1D9E75}
+.stat-bar-count{font-size:14px;font-weight:500;color:#2C2C2A;width:32px;text-align:right;flex-shrink:0}
+
+.import-zone{border:2px dashed #B4B2A9;border-radius:12px;padding:28px 16px;text-align:center;margin-bottom:16px;cursor:pointer}
+.import-zone i{font-size:36px;color:#5F5E5A;display:block;margin-bottom:10px}
+.import-zone p{font-size:14px;color:#5F5E5A}
+.import-result{background:#F1EFE8;border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:14px}
+.section-divider{border-top:0.5px solid #D3D1C7;margin:20px 0 16px;padding-top:4px}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header" id="app-header">
+    <div>
+      <div class="header-title">高島平 ここからステーション</div>
+      <div class="header-sub" id="current-date"></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="page active" id="page-home">
+      <div class="home-grid">
+        <div class="btn-checkin" onclick="goTo('checkin')">
+          <div class="home-icon"><i class="ti ti-login"></i></div>
+          <div>
+            <div class="home-btn-label">入場</div>
+            <div class="home-btn-sub">来所したらここをタップ</div>
+          </div>
+          <i class="ti ti-chevron-right home-arrow"></i>
+        </div>
+
+        <div class="secondary-row">
+          <div class="home-btn register" onclick="goTo('register')">
+            <div class="home-icon"><i class="ti ti-user-plus"></i></div>
+            <div>
+              <div class="home-btn-label">新規登録</div>
+              <div class="home-btn-sub">はじめての方はこちら</div>
+            </div>
+            <i class="ti ti-chevron-right home-arrow"></i>
+          </div>
+          <div class="home-btn history" onclick="goTo('history')">
+            <div class="home-icon"><i class="ti ti-clock"></i></div>
+            <div>
+              <div class="home-btn-label">履歴</div>
+              <div class="home-btn-sub">日別の来所記録を見る</div>
+            </div>
+            <i class="ti ti-chevron-right home-arrow"></i>
+          </div>
+        </div>
+
+        <div class="home-divider"></div>
+
+        <div class="mini-row">
+          <div class="mini-btn" onclick="goTo('export')">
+            <i class="ti ti-file-export"></i>
+            <div class="mini-btn-label">エクスポート</div>
+          </div>
+          <div class="mini-btn" onclick="goTo('members')">
+            <i class="ti ti-users"></i>
+            <div class="mini-btn-label">会員一覧</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-checkin">
+      <div id="success-area"></div>
+      <p class="section-label">名前で検索してチェックイン</p>
+      <div class="search-box">
+        <i class="ti ti-search"></i>
+        <input type="text" id="checkin-search" placeholder="名前またはよみがなで検索…" oninput="searchCheckin()" autocomplete="off">
+      </div>
+      <div id="checkin-results"></div>
+    </div>
+
+    <div class="page" id="page-history">
+      <div class="date-nav">
+        <div class="date-arrow" id="date-prev" onclick="shiftDate(-1)"><i class="ti ti-chevron-left"></i></div>
+        <div>
+          <div class="date-label" id="date-label"></div>
+          <div class="date-label-sub" id="date-label-sub"></div>
+        </div>
+        <div class="date-arrow" id="date-next" onclick="shiftDate(1)"><i class="ti ti-chevron-right"></i></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">来所者数</div><div class="metric-value" id="day-count">0</div></div>
+        <div class="metric new"><div class="metric-label">うち新規</div><div class="metric-value" id="day-new-count">0</div></div>
+      </div>
+
+      <div class="stat-block">
+        <p class="section-label"><i class="ti ti-chart-bar" style="vertical-align:-3px;margin-right:6px;font-size:16px"></i>年齢層（この日）</p>
+        <div id="age-stats"></div>
+      </div>
+      <div class="stat-block">
+        <p class="section-label"><i class="ti ti-map-pin" style="vertical-align:-3px;margin-right:6px;font-size:16px"></i>居住地域（この日）</p>
+        <div id="region-stats"></div>
+      </div>
+
+      <p class="section-label">来所した方</p>
+      <div id="history-list"></div>
+    </div>
+
+    <div class="page" id="page-export">
+      <p class="section-label">期間を指定する</p>
+      <div class="export-row">
+        <label>開始日</label>
+        <input type="date" id="export-start">
+      </div>
+      <div class="export-row" style="margin-bottom:4px">
+        <label>終了日</label>
+        <input type="date" id="export-end">
+      </div>
+      <div class="export-preview" id="export-preview"></div>
+
+      <div class="stat-block">
+        <p class="section-label"><i class="ti ti-chart-bar" style="vertical-align:-3px;margin-right:6px;font-size:16px"></i>年齢層</p>
+        <div id="export-age-stats"></div>
+      </div>
+      <div class="stat-block">
+        <p class="section-label"><i class="ti ti-map-pin" style="vertical-align:-3px;margin-right:6px;font-size:16px"></i>居住地域</p>
+        <div id="export-region-stats"></div>
+      </div>
+
+      <button class="btn-primary" onclick="exportRangeCSV()"><i class="ti ti-download" style="vertical-align:-3px;margin-right:8px;font-size:18px"></i>来所記録をCSVで出力</button>
+    </div>
+
+    <div class="page" id="page-members">
+      <div class="search-box">
+        <i class="ti ti-search"></i>
+        <input type="text" id="member-search" placeholder="会員を検索…" oninput="searchMembers()" autocomplete="off">
+      </div>
+      <button class="btn-secondary" onclick="goTo('import')" style="margin-bottom:16px"><i class="ti ti-file-upload" style="vertical-align:-3px;margin-right:8px;font-size:17px"></i>CSVから取込み</button>
+      <div id="member-list"></div>
+    </div>
+
+    <div class="page" id="page-import">
+      <p class="section-label">CSVファイルから会員を一括登録</p>
+      <div class="import-zone" onclick="document.getElementById('csv-file-input').click()">
+        <i class="ti ti-file-upload"></i>
+        <p>タップしてCSVファイルを選択</p>
+      </div>
+      <input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCsvFile(event)">
+      <div class="import-result" id="import-result" style="display:none"></div>
+      <p class="section-label" style="margin-top:20px">CSVの形式</p>
+      <div class="staff-only" style="margin-top:0">
+        <i class="ti ti-info-circle" style="font-size:15px;margin-top:1px"></i>
+        <span>1行目はヘッダー行：姓,名,姓よみ,名よみ,電話番号,生年月日,都道府県,区市,町名,番地以降<br>生年月日は yyyymmdd 形式（例：19480512）</span>
+      </div>
+    </div>
+
+    <div class="page" id="page-register">
+      <p class="section-label">新規会員登録</p>
+      <div style="background:#ffffff;border:1px solid #D3D1C7;border-radius:12px;padding:18px">
+
+        <div class="form-row">
+          <div class="form-group">
+            <div class="form-label">姓 <span style="color:#E24B4A">*</span></div>
+            <input class="form-input" type="text" id="reg-lastname" placeholder="田中">
+          </div>
+          <div class="form-group">
+            <div class="form-label">名 <span style="color:#E24B4A">*</span></div>
+            <input class="form-input" type="text" id="reg-firstname" placeholder="花子">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <div class="form-label">せい（よみ） <span style="color:#E24B4A">*</span></div>
+            <input class="form-input" type="text" id="reg-lastkana" placeholder="たなか">
+          </div>
+          <div class="form-group">
+            <div class="form-label">めい（よみ） <span style="color:#E24B4A">*</span></div>
+            <input class="form-input" type="text" id="reg-firstkana" placeholder="はなこ">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">電話番号（ハイフンなし）</div>
+          <input class="form-input" type="tel" id="reg-tel" placeholder="09012345678" inputmode="numeric" maxlength="11">
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">生年月日</div>
+          <div class="birth-row">
+            <input class="form-input yr" type="number" id="reg-birth-y" placeholder="1948" inputmode="numeric" min="1900" max="2026">
+            <span>年</span>
+            <input class="form-input mo" type="number" id="reg-birth-m" placeholder="5" inputmode="numeric" min="1" max="12">
+            <span>月</span>
+            <input class="form-input dy" type="number" id="reg-birth-d" placeholder="12" inputmode="numeric" min="1" max="31">
+            <span>日</span>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="form-group">
+          <div class="form-label">都道府県</div>
+          <input class="form-input" type="text" id="reg-pref" placeholder="東京都" value="東京都">
+        </div>
+        <div class="form-group">
+          <div class="form-label">区市</div>
+          <input class="form-input" type="text" id="reg-city" placeholder="板橋区" value="板橋区">
+        </div>
+        <div class="form-group">
+          <div class="form-label">町名</div>
+          <input class="form-input" type="text" id="reg-town" placeholder="高島平〇丁目">
+        </div>
+        <div class="form-group">
+          <div class="form-label">番地以降</div>
+          <input class="form-input" type="text" id="reg-banchi" placeholder="〇番〇号 〇〇マンション〇〇号室">
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="form-group">
+          <div class="form-label">備考（スタッフ用・会員には表示されません）</div>
+          <input class="form-input" type="text" id="reg-note" placeholder="連絡事項など">
+        </div>
+        <button class="btn-primary" onclick="registerMember()"><i class="ti ti-user-plus" style="vertical-align:-3px;margin-right:8px;font-size:18px"></i>登録する</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let members = [
+  {id:1,lastname:'田中',firstname:'花子',lastkana:'たなか',firstkana:'はなこ',tel:'09012345678',note:'',visits:12,birth:'1950-04-02',pref:'東京都',city:'板橋区',town:'高島平3丁目',banchi:''},
+  {id:2,lastname:'佐藤',firstname:'一郎',lastkana:'さとう',firstkana:'いちろう',tel:'0333334444',note:'',visits:8,birth:'1944-11-20',pref:'東京都',city:'板橋区',town:'高島平5丁目',banchi:''},
+  {id:3,lastname:'山田',firstname:'幸子',lastkana:'やまだ',firstkana:'さちこ',tel:'09098765432',note:'要サポート',visits:5,birth:'1936-06-15',pref:'東京都',city:'板橋区',town:'高島平1丁目',banchi:''},
+  {id:4,lastname:'鈴木',firstname:'正雄',lastkana:'すずき',firstkana:'まさお',tel:'',note:'',visits:20,birth:'1942-01-30',pref:'東京都',city:'板橋区',town:'蓮根',banchi:''},
+];
+
+function fullName(m){return m.lastname+' '+m.firstname}
+function fullKana(m){return m.lastkana+' '+m.firstkana}
+
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const todayStr = ymd(new Date());
+function daysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return ymd(d)}
+
+function calcAge(birth){
+  if(!birth)return null;
+  const b=new Date(birth);
+  if(isNaN(b.getTime()))return null;
+  const t=new Date();
+  let age=t.getFullYear()-b.getFullYear();
+  if(t.getMonth()<b.getMonth()||(t.getMonth()===b.getMonth()&&t.getDate()<b.getDate()))age--;
+  return age;
+}
+function ageGroup(birth){
+  const age=calcAge(birth);
+  if(age===null)return 'その他';
+  if(age>=60&&age<70)return '60代';
+  if(age>=70&&age<80)return '70代';
+  if(age>=80&&age<90)return '80代';
+  if(age>=90&&age<100)return '90代';
+  return 'その他';
+}
+function regionGroup(town){
+  if(town&&town.includes('高島平'))return town;
+  return 'その他';
+}
+
+let allRecords = [
+  {memberId:1,date:todayStr,time:'10:15',isNew:false},
+  {memberId:4,date:todayStr,time:'10:42',isNew:false},
+  {memberId:2,date:daysAgo(1),time:'09:50',isNew:false},
+  {memberId:3,date:daysAgo(2),time:'14:05',isNew:false},
+  {memberId:1,date:daysAgo(3),time:'11:00',isNew:false},
+];
+let nextId = 5;
+let currentPage = 'home';
+let viewDate = new Date();
+
+function initials(m){return (m.lastname+m.firstname).slice(0,2)}
+function now(){return new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}
+
+document.getElementById('current-date').textContent = new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
+
+function renderHeader(){
+  const el = document.getElementById('app-header');
+  if(currentPage==='home'){
+    el.innerHTML = '<div><div class="header-title">高島平 ここからステーション</div><div class="header-sub" id="current-date"></div></div>';
+    document.getElementById('current-date').textContent = new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
+  } else {
+    const titles = {checkin:'入場',history:'履歴',members:'会員一覧',register:'新規登録',import:'CSV取込み',export:'エクスポート'};
+    const backTarget = currentPage==='import' ? 'members' : 'home';
+    el.innerHTML = '<div class="back-btn" onclick="goTo(\''+backTarget+'\')"><i class="ti ti-chevron-left"></i>戻る</div><div class="header-title">'+titles[currentPage]+'</div><div style="width:50px"></div>';
+  }
+}
+
+function goTo(page){
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  renderHeader();
+  if(page==='history'){
+    viewDate=new Date();
+    renderHistory();
+  }
+  if(page==='export'){
+    document.getElementById('export-start').value = daysAgo(6);
+    document.getElementById('export-end').value = todayStr;
+    document.getElementById('export-start').max = todayStr;
+    document.getElementById('export-end').max = todayStr;
+    updateExportPreview();
+  }
+  if(page==='members')renderMembers('');
+  if(page==='checkin'){document.getElementById('checkin-search').value='';document.getElementById('checkin-results').innerHTML='';document.getElementById('success-area').innerHTML='';}
+  if(page==='import'){document.getElementById('import-result').style.display='none';document.getElementById('csv-file-input').value='';}
+}
+
+function searchCheckin(){
+  const q = document.getElementById('checkin-search').value.trim();
+  const area = document.getElementById('checkin-results');
+  if(!q){area.innerHTML='';return}
+  const res = members.filter(m=>fullName(m).includes(q)||fullKana(m).includes(q)||m.lastname.includes(q)||m.firstname.includes(q)||m.lastkana.includes(q)||m.firstkana.includes(q));
+  if(res.length===0){area.innerHTML='<div class="empty"><i class="ti ti-mood-empty"></i>該当する会員が見つかりません</div>';return}
+  area.innerHTML = res.map(m=>'<div class="member-card"><div class="avatar">'+initials(m)+'</div><div class="member-info"><div class="member-name">'+fullName(m)+'</div><div class="member-kana">'+fullKana(m)+'</div><div class="member-meta">来所回数：'+m.visits+'回</div></div><button class="checkin-btn" onclick="doCheckin('+m.id+')">チェックイン</button></div>').join('');
+}
+
+function doCheckin(id){
+  const m = members.find(x=>x.id===id);
+  if(!m)return;
+  const wasNew = m.visits===0;
+  m.visits++;
+  const t = now();
+  allRecords.unshift({memberId:id,date:todayStr,time:t,isNew:wasNew});
+  document.getElementById('checkin-search').value='';
+  document.getElementById('checkin-results').innerHTML='';
+  const area = document.getElementById('success-area');
+  area.innerHTML='<div class="success-banner"><i class="ti ti-circle-check"></i><div><div class="success-text">'+fullName(m)+'さん、ようこそ！</div><div class="success-sub">チェックイン完了 '+t+'</div></div></div>';
+  setTimeout(function(){ if(currentPage==='checkin') goTo('home') },1800);
+}
+
+function shiftDate(delta){
+  viewDate.setDate(viewDate.getDate()+delta);
+  renderHistory();
+}
+
+function renderStatBars(containerId, counts, total, colorClass){
+  const el = document.getElementById(containerId);
+  const entries = Object.entries(counts).filter(([k,v])=>v>0);
+  if(entries.length===0||total===0){el.innerHTML='<div class="empty" style="padding:16px"><i class="ti ti-chart-bar"></i>データがありません</div>';return}
+  el.innerHTML = entries.map(([label,count])=>{
+    const pct = total>0 ? Math.round((count/total)*100) : 0;
+    return '<div class="stat-bar-row"><div class="stat-bar-label">'+label+'</div><div class="stat-bar-track"><div class="stat-bar-fill '+colorClass+'" style="width:'+pct+'%"></div></div><div class="stat-bar-count">'+count+'</div></div>';
+  }).join('');
+}
+
+function getRangeStats(startStr,endStr){
+  const rangeRecords = allRecords.filter(r=>r.date>=startStr&&r.date<=endStr);
+  const ageCounts = {'60代':0,'70代':0,'80代':0,'90代':0,'その他':0};
+  const regionCounts = {};
+  rangeRecords.forEach(r=>{
+    const m = members.find(x=>x.id===r.memberId);
+    if(!m)return;
+    ageCounts[ageGroup(m.birth)]++;
+    const rg = regionGroup(m.town);
+    regionCounts[rg] = (regionCounts[rg]||0)+1;
+  });
+  return {rangeRecords,ageCounts,regionCounts};
+}
+
+function renderHistory(){
+  const dateStr = ymd(viewDate);
+  const isToday = dateStr===todayStr;
+  document.getElementById('date-label').textContent = viewDate.toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
+  document.getElementById('date-label-sub').textContent = isToday ? '本日' : '';
+  document.getElementById('date-next').classList.toggle('disabled', isToday);
+
+  const stats = getRangeStats(dateStr,dateStr);
+  const dayRecords = stats.rangeRecords;
+  const newCount = dayRecords.filter(r=>r.isNew).length;
+  document.getElementById('day-count').textContent = dayRecords.length;
+  document.getElementById('day-new-count').textContent = newCount;
+
+  renderStatBars('age-stats', stats.ageCounts, dayRecords.length, 'age');
+  renderStatBars('region-stats', stats.regionCounts, dayRecords.length, 'region');
+
+  const el = document.getElementById('history-list');
+  if(dayRecords.length===0){el.innerHTML='<div class="empty"><i class="ti ti-clock"></i>この日の記録はありません</div>';return}
+  el.innerHTML=dayRecords.map(r=>{
+    const m = members.find(x=>x.id===r.memberId);
+    return '<div class="history-item"><div><div class="history-name">'+(m?fullName(m):'不明')+'</div><span class="badge '+(r.isNew?'new':'')+'">'+(r.isNew?'新規':'入場')+'</span></div><div class="history-time">'+r.time+'</div></div>';
+  }).join('');
+}
+
+function updateExportPreview(){
+  const start = document.getElementById('export-start').value;
+  const end = document.getElementById('export-end').value;
+  const prev = document.getElementById('export-preview');
+  if(!start||!end){prev.textContent='';return}
+  if(start>end){
+    prev.textContent='開始日は終了日より前にしてください';
+    document.getElementById('export-age-stats').innerHTML='';
+    document.getElementById('export-region-stats').innerHTML='';
+    return;
+  }
+  const stats = getRangeStats(start,end);
+  prev.textContent = 'この期間の記録：'+stats.rangeRecords.length+'件';
+  renderStatBars('export-age-stats', stats.ageCounts, stats.rangeRecords.length, 'age');
+  renderStatBars('export-region-stats', stats.regionCounts, stats.rangeRecords.length, 'region');
+}
+
+document.addEventListener('change', function(e){
+  if(e.target.id==='export-start'||e.target.id==='export-end') updateExportPreview();
+});
+
+function renderMembers(q){
+  const res = q ? members.filter(m=>fullName(m).includes(q)||fullKana(m).includes(q)) : members;
+  const el = document.getElementById('member-list');
+  if(res.length===0){el.innerHTML='<div class="empty"><i class="ti ti-users"></i>会員が見つかりません</div>';return}
+  el.innerHTML=res.map(m=>{
+    const age = calcAge(m.birth);
+    const metaParts = [m.tel||'電話番号未登録', '来所'+m.visits+'回'];
+    if(age!==null) metaParts.push(age+'歳');
+    if(m.town) metaParts.push(m.town);
+    return '<div class="member-card" style="flex-direction:column;align-items:stretch;gap:0"><div style="display:flex;align-items:center;gap:14px"><div class="avatar">'+initials(m)+'</div><div class="member-info"><div class="member-name">'+fullName(m)+'</div><div class="member-kana">'+fullKana(m)+'</div><div class="member-meta">'+metaParts.join(' ・ ')+'</div></div></div>'+(m.note?'<div class="staff-only"><i class="ti ti-lock" style="font-size:15px;margin-top:1px"></i><span><strong style="font-weight:500">スタッフ用備考：</strong>'+m.note+'</span></div>':'')+'</div>';
+  }).join('');
+}
+
+function searchMembers(){
+  renderMembers(document.getElementById('member-search').value.trim());
+}
+
+function registerMember(){
+  const lastname=document.getElementById('reg-lastname').value.trim();
+  const firstname=document.getElementById('reg-firstname').value.trim();
+  const lastkana=document.getElementById('reg-lastkana').value.trim();
+  const firstkana=document.getElementById('reg-firstkana').value.trim();
+  const tel=document.getElementById('reg-tel').value.trim();
+  const y=document.getElementById('reg-birth-y').value;
+  const mo=document.getElementById('reg-birth-m').value;
+  const d=document.getElementById('reg-birth-d').value;
+  const pref=document.getElementById('reg-pref').value.trim();
+  const city=document.getElementById('reg-city').value.trim();
+  const town=document.getElementById('reg-town').value.trim();
+  const banchi=document.getElementById('reg-banchi').value.trim();
+  const note=document.getElementById('reg-note').value.trim();
+  if(!lastname||!firstname||!lastkana||!firstkana){alert('姓名・よみがなは必須です');return}
+  let birth='';
+  if(y&&mo&&d){birth=y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0')}
+  members.push({id:nextId++,lastname,firstname,lastkana,firstkana,tel,note,visits:0,birth,pref,city,town,banchi});
+  ['reg-lastname','reg-firstname','reg-lastkana','reg-firstkana','reg-tel','reg-birth-y','reg-birth-m','reg-birth-d','reg-town','reg-banchi','reg-note'].forEach(id=>document.getElementById(id).value='');
+  goTo('home');
+}
+
+function exportRangeCSV(){
+  const start = document.getElementById('export-start').value;
+  const end = document.getElementById('export-end').value;
+  if(!start||!end){alert('開始日と終了日を選んでください');return}
+  if(start>end){alert('開始日は終了日より前にしてください');return}
+  const rangeRecords = allRecords.filter(r=>r.date>=start&&r.date<=end).sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+  if(rangeRecords.length===0){alert('この期間の記録がありません');return}
+  const rows=[['日付','姓','名','入場時刻','新規','年齢層','居住地域']];
+  rangeRecords.forEach(r=>{
+    const m=members.find(x=>x.id===r.memberId);
+    rows.push([r.date,m?m.lastname:'',m?m.firstname:'',r.time,r.isNew?'新規':'',m?ageGroup(m.birth):'',m?regionGroup(m.town):'']);
+  });
+  const csv='\uFEFF'+rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='入場記録_'+start+'_'+end+'.csv';
+  a.click();
+}
+
+function handleCsvFile(event){
+  const file = event.target.files[0];
+  if(!file)return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const text = e.target.result;
+    const lines = text.split(/\r?\n/).filter(l=>l.trim().length>0);
+    if(lines.length<2){showImportResult('データ行が見つかりませんでした',true);return}
+    let added=0, skipped=0;
+    for(let i=1;i<lines.length;i++){
+      const cols = lines[i].split(',').map(c=>c.trim());
+      const lastname=cols[0], firstname=cols[1], lastkana=cols[2], firstkana=cols[3], tel=cols[4], birthRaw=cols[5], pref=cols[6], city=cols[7], town=cols[8], banchi=cols[9];
+      if(!lastname||!firstname){skipped++;continue}
+      let birth='';
+      if(birthRaw&&birthRaw.length===8){birth=birthRaw.slice(0,4)+'-'+birthRaw.slice(4,6)+'-'+birthRaw.slice(6,8)}
+      members.push({id:nextId++,lastname,firstname,lastkana:lastkana||'',firstkana:firstkana||'',tel:tel||'',note:'',visits:0,birth,pref:pref||'',city:city||'',town:town||'',banchi:banchi||''});
+      added++;
+    }
+    showImportResult(added+'件登録しました'+(skipped>0?'（'+skipped+'件は姓名不足のためスキップ）':''),false);
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function showImportResult(msg, isError){
+  const el = document.getElementById('import-result');
+  el.style.display='block';
+  el.style.color = isError ? '#A32D2D' : '#2C2C2A';
+  el.innerHTML = '<i class="ti ti-'+(isError?'alert-circle':'circle-check')+'" style="vertical-align:-3px;margin-right:6px;font-size:17px"></i>'+msg;
+}
+</script>
+</body>
+</html>
